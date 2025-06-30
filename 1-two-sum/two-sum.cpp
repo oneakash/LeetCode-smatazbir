@@ -1,18 +1,17 @@
 class Solution {
 public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        int i, j, n = nums.size();
-        for(i = 0; i < n; i++)
-        {
-            int x = target - nums[i];
-            for(j = 0; j < n && i != j; j++)
-            {
-                if(x==nums[j])
-                {
-                    return {i,j};
-                }
+    vector<int> twoSum(vector<int> &nums, int target) {
+        unordered_map<int, int> hash;
+        for (int i = 0; i < nums.size(); i++) {
+            hash[nums[i]] = i;
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            int complement = target - nums[i];
+            if (hash.find(complement) != hash.end() && hash[complement] != i) {
+                return {i, hash[complement]};
             }
         }
-        return {0,0};
+        // If no valid pair is found, return an empty vector
+        return {};
     }
 };
