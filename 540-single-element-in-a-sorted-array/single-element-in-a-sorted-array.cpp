@@ -19,7 +19,7 @@ public:
             }
             else
             {
-                if((mid+1)%2)
+                if((n - mid-1)%2==0)
                     lo=mid+1;
                 else
                     hi=mid-1;
