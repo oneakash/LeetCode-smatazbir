@@ -2,7 +2,7 @@ class Solution {
     int sum(vector<int> &nums, int div){
         long long s=0;
         for(auto num:nums){
-            s+=(ceil)((double)num/(double)div);
+            s+=(num+div-1)/div;
         }
         return s;
     }
