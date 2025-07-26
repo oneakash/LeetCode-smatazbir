@@ -15,8 +15,9 @@ public:
     int romanToInt(string s) {
         int c=rchartoi(s[s.size()-1]);
         for(int i=s.size()-2;i>=0;i--){
-            if(rchartoi(s[i])<rchartoi(s[i+1]))c-=rchartoi(s[i]);
-            else c+=rchartoi(s[i]);
+            int pt=rchartoi(s[i]),pe=rchartoi(s[i+1]);
+            if(pt<pe)c-=pt;
+            else c+=pt;
             cout<<c<<endl;
         }
         return c;
