@@ -25,8 +25,8 @@ public:
                 const auto y = j + dy;
 
                 if (
-                    0 <= x and x < m and 0 <= y and y < n  // in bounds
-                    and image[x][y] == org // allowed to change
+                    0 <= x and x < m and 0 <= y and y < n  
+                    and image[x][y] == org 
                 ) {
                     image[x][y] = color;
                     q.push_back({x, y});
