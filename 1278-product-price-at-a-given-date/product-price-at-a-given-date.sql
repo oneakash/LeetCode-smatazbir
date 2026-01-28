@@ -8,7 +8,7 @@ select latest.product_id, new_price as price
 from latest join products on products.product_id=latest.product_id
 and products.change_date=latest.latest_date
 union
-select distinct product_id, 10 as price
+select product_id, 10 as price
 from products
 where product_id not in (
     select product_id
