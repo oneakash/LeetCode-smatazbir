@@ -1,21 +1,21 @@
+//lambda
 class Solution {
-private:
-    void backtrack(int start, int n, int k, vector<int> &curr, vector<vector<int>> &res){
-        if(curr.size() == k){
-            res.push_back(curr);
-            return;
-        }
-        for(int i = start; i<= n-(k-curr.size())+1; i++){
-            curr.push_back(i);
-            backtrack(i+1, n, k, curr, res);
-            curr.pop_back();
-        }
-    }
 public:
     vector<vector<int>> combine(int n, int k) {
         vector<vector<int>> res;
         vector<int> curr;
-        backtrack(1, n, k, curr, res);
+        function<void(int)> backtrack = [&](int start){
+            if(curr.size()==k){
+                res.push_back(curr);
+                return;
+            }
+            for(int i = start; i<=n-(k-curr.size())+1; i++){
+                curr.push_back(i);
+                backtrack(i+1);
+                curr.pop_back();
+            }
+        };
+        backtrack(1);
         return res;
     }
 };
