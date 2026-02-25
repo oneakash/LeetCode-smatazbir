@@ -1,57 +1,80 @@
 class NumArray {
-private:
+
+    int* tree;
     vector<int> arr;
-    vector<int> tree;
-    void build(int i, int l, int r){
-        if(l==r){
-            tree[i] = arr[l];
+    void build(int treeArrayIndex, int originArrayLeft, int originArrayRight){
+        if(originArrayLeft == originArrayRight){
+            // single element
+            tree[treeArrayIndex] = arr[originArrayLeft];
             return;
         }
-        int li = i*2, ri = i*2+1;
-        int m = (l+r)/2;
-        build(li, l, m);
-        build(ri, m+1, r);
-        tree[i] = tree[li]+tree[ri];
+        int treeArrayLeftIndex = treeArrayIndex * 2;
+        int treeArrayRightIndex = treeArrayIndex * 2 + 1;
+        int originArrayMid = (originArrayLeft + originArrayRight) / 2;
+
+        build(treeArrayLeftIndex, originArrayLeft, originArrayMid);
+        build(treeArrayRightIndex, originArrayMid + 1, originArrayRight);
+
+        tree[treeArrayIndex] = tree[treeArrayLeftIndex] + tree[treeArrayRightIndex];
     }
-    void update(int i, int l, int r, int ui, int val){
-        if(l==r){
-            tree[i] = val;
+
+    void update(int treeArrayIndex, int originArrayLeft, int originArrayRight, int originalArrayUpdateIndex, int value){
+
+        if(originArrayLeft == originArrayRight){
+            // single element
+            tree[treeArrayIndex] = value;
             return;
         }
-        int li = i*2, ri = i*2+1;
-        int m = (l+r)/2;
-        if(ui<=m)
-        update(li, l, m, ui, val);
+        int treeArrayLeftIndex = treeArrayIndex * 2;
+        int treeArrayRightIndex = treeArrayIndex * 2 + 1;
+        int originArrayMid = (originArrayLeft + originArrayRight) / 2;
+        
+        if(originalArrayUpdateIndex <= originArrayMid)
+        update(treeArrayLeftIndex, originArrayLeft, originArrayMid, originalArrayUpdateIndex, value);
+
         else
-        update(ri, m+1, r, ui, val);
-        tree[i] = tree[li]+tree[ri];
+        update(treeArrayRightIndex, originArrayMid + 1, originArrayRight, originalArrayUpdateIndex, value);
+
+        tree[treeArrayIndex] = tree[treeArrayLeftIndex] + tree[treeArrayRightIndex];
     }
-    int query(int i, int l, int r, int ql, int qr){
-        if(ql<=l && qr>=r){
-            return tree[i];
+
+
+
+    int query(int treeArrayIndex, int originArrayLeft, int originArrayRight, int queryLeft, int queryRight){
+
+        // originalarrayportion is fully inside query
+        if(queryLeft <= originArrayLeft && originArrayRight <= queryRight){
+            return tree[treeArrayIndex];
         }
-        if(qr<l || ql>r){
+
+        // fully outside
+        if(originArrayRight < queryLeft || queryRight < originArrayLeft){
             return 0;
         }
-        int li = i*2, ri = i*2+1;
-        int m = (l+r)/2;
-        int lans = query(li, l, m, ql, qr);
-        int rans = query(ri, m+1, r, ql, qr);
-        return lans+rans;
+
+        int treeArrayLeftIndex = treeArrayIndex * 2;
+        int treeArrayRightIndex = treeArrayIndex * 2 + 1;
+        int originArrayMid = (originArrayLeft + originArrayRight) / 2;
+        
+        int leftAnswer = query(treeArrayLeftIndex, originArrayLeft, originArrayMid, queryLeft, queryRight);
+        int rightAnswer = query(treeArrayRightIndex, originArrayMid + 1, originArrayRight, queryLeft, queryRight);
+
+        return leftAnswer + rightAnswer;
     }
+
 public:
     NumArray(vector<int>& nums) {
         arr = nums;
-        tree.resize(nums.size()*4);
-        build(1, 0, arr.size()-1);
+        tree = new int[nums.size() * 4];
+        build(1, 0, nums.size() - 1);
     }
     
     void update(int index, int val) {
-        update(1, 0, arr.size()-1, index, val);
+        update(1, 0, arr.size() - 1, index, val);
     }
     
     int sumRange(int left, int right) {
-        return query(1, 0, arr.size()-1, left, right);
+        return query(1, 0, arr.size() - 1, left, right);
     }
 };
 
