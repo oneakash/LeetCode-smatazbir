@@ -11,7 +11,6 @@ public:
                 ans = max(res, ans);
             }
             else{
-                ans = max(res, ans);
                 res = 0;
                 int idx = mp[s[i]];
                 i = idx;
